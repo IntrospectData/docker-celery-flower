@@ -18,7 +18,7 @@ jobs:
             docker login -u _json_key -p "$(cat keyfile.json)" gcr.io
             docker tag gcr.io/${GCLOUD_PROJECT_ID}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1} gcr.io/${GCLOUD_PROJECT_ID}/${CIRCLE_PROJECT_REPONAME}:latest
             docker push gcr.io/${GCLOUD_PROJECT_ID}/${CIRCLE_PROJECT_REPONAME}
-  container_publish_tag:
+  publish_tag:
     working_directory: ~/auth_glue_svc
     docker:
       - image: docker:17.11.0-ce-git
@@ -35,8 +35,8 @@ jobs:
           command: |
             echo $GCLOUD_SERVICE_KEY | base64 -d > keyfile.json
             docker login -u _json_key -p "$(cat keyfile.json)" gcr.io
-            docker pull gcr.io/${GCLOUD_PROJECT_ID}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1} &
-            docker tag gcr.io/${GCLOUD_PROJECT_ID}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1} gcr.io/${GCLOUD_PROJECT_ID}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG} &
+            docker pull gcr.io/${GCLOUD_PROJECT_ID}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}
+            docker tag gcr.io/${GCLOUD_PROJECT_ID}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1} gcr.io/${GCLOUD_PROJECT_ID}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}
             docker push gcr.io/${GCLOUD_PROJECT_ID}/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_TAG}
 workflows:
   version: 2
